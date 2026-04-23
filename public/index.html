@@ -7,7 +7,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#FF6B35">
 <title>小E老师 · AI英语私教</title>
-<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;小E老师&quot;,&quot;short_name&quot;:&quot;小E老师&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23FFF8F0&quot;,&quot;theme_color&quot;:&quot;%23FF6B35&quot;}">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -20,13 +19,17 @@
   body {
     font-family: 'Nunito', 'Noto Sans SC', 'PingFang SC', sans-serif;
     background: var(--bg); color: var(--text);
-    max-width: 500px; margin: 0 auto; min-height: 100vh;
+    min-height: 100vh;
     -webkit-tap-highlight-color: transparent;
+  }
+  .app-container {
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
   }
   button { font-family: inherit; cursor: pointer; border: none; outline: none; -webkit-tap-highlight-color: transparent; }
   input, textarea { font-family: inherit; outline: none; }
 
-  /* Animations */
   @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
   @keyframes popIn { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }
   @keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.06); } }
@@ -40,47 +43,59 @@
   /* Header */
   .header {
     background: linear-gradient(135deg, var(--primary), #FF8C42);
-    padding: 20px; color: #fff; position: relative; overflow: hidden;
+    padding: 24px 32px; color: #fff; position: relative; overflow: hidden;
   }
-  .header-emoji { position:absolute; top:-15px; right:-10px; font-size:80px; opacity:0.15; }
-  .header-sub { font-size:12px; opacity:0.85; margin-bottom:2px; }
-  .header-title { font-size:22px; font-weight:900; margin-bottom:10px; }
-  .xp-bar-bg { background:rgba(255,255,255,0.25); border-radius:8px; height:12px; overflow:hidden; }
+  .header-emoji { position:absolute; top:-15px; right:10px; font-size:90px; opacity:0.15; }
+  .header-sub { font-size:13px; opacity:0.85; margin-bottom:2px; }
+  .header-title { font-size:26px; font-weight:900; margin-bottom:10px; }
+  .xp-bar-bg { background:rgba(255,255,255,0.25); border-radius:8px; height:14px; overflow:hidden; }
   .xp-bar-fill { height:100%; border-radius:8px; background:linear-gradient(90deg,#FDE68A,#F59E0B); transition:width 0.6s; }
-  .xp-info { display:flex; justify-content:space-between; font-size:11px; margin-top:5px; opacity:0.85; }
+  .xp-info { display:flex; justify-content:space-between; font-size:12px; margin-top:6px; opacity:0.85; }
 
   /* Navigation */
   .nav { display:flex; border-bottom:2px solid var(--border); background:var(--card); position:sticky; top:0; z-index:50; }
-  .nav-btn { flex:1; padding:12px 0; font-size:13px; font-weight:700; background:none; color:var(--muted); border-bottom:3px solid transparent; transition:all 0.2s; }
+  .nav-btn { flex:1; padding:14px 0; font-size:14px; font-weight:700; background:none; color:var(--muted); border-bottom:3px solid transparent; transition:all 0.2s; }
   .nav-btn.active { color:var(--primary); border-bottom-color:var(--primary); }
 
   /* Home menu */
+  .home-content { padding: 24px 32px; }
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   .menu-card {
-    display:flex; align-items:center; gap:14px; background:var(--card); padding:16px;
-    border-radius:16px; border:2px solid var(--border); margin-bottom:10px;
-    transition: transform 0.15s; text-align:left; width:100%;
+    display:flex; align-items:center; gap:14px; background:var(--card); padding:18px 20px;
+    border-radius:16px; border:2px solid var(--border); transition: transform 0.15s; text-align:left; width:100%;
   }
   .menu-card:active { transform:scale(0.97); }
-  .menu-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+  .menu-card.full-width { grid-column: 1 / -1; }
+  .menu-icon { width:50px; height:50px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
   .menu-title { font-size:16px; font-weight:800; color:var(--text); }
   .menu-sub { font-size:12px; color:var(--muted); font-weight:600; margin-top:2px; }
 
+  /* Unit grid */
+  .unit-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+  .unit-card {
+    padding:16px; border-radius:14px; text-align:center; border:2px solid var(--border);
+    background:var(--card); transition:all 0.15s;
+  }
+  .unit-card.active { border-color:var(--primary); background:var(--primary-light); }
+  .unit-card:active { transform:scale(0.96); }
+
   /* Chat */
-  .chat-area { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; }
-  .msg { max-width:85%; padding:12px 16px; border-radius:18px; font-size:14px; font-weight:600; line-height:1.65; animation:fadeIn 0.3s; }
+  .chat-wrapper { display:flex; flex-direction:column; height:calc(100vh - 140px); }
+  .chat-area { flex:1; overflow-y:auto; padding:24px 32px; display:flex; flex-direction:column; gap:14px; }
+  .msg { max-width:75%; padding:14px 18px; border-radius:18px; font-size:15px; font-weight:600; line-height:1.7; animation:fadeIn 0.3s; }
   .msg-ai { background:var(--card); border:1.5px solid var(--border); align-self:flex-start; border-bottom-left-radius:4px; }
   .msg-user { background:var(--primary); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
   .msg-ai .en-text { color:var(--blue); font-weight:800; cursor:pointer; }
   .msg-ai .en-text:hover { text-decoration:underline; }
-  .typing-dots { display:flex; gap:4px; padding:12px 18px; align-self:flex-start; }
+  .typing-dots { display:flex; gap:4px; padding:14px 20px; align-self:flex-start; }
   .typing-dots span { width:8px; height:8px; border-radius:50%; background:var(--muted); animation:typing 1s infinite; }
   .typing-dots span:nth-child(2) { animation-delay:0.2s; }
   .typing-dots span:nth-child(3) { animation-delay:0.4s; }
 
   /* Quick replies */
-  .quick-replies { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 8px; }
+  .quick-replies { display:flex; flex-wrap:wrap; gap:8px; padding:0 32px 10px; }
   .quick-btn {
-    padding:8px 14px; border-radius:20px; font-size:13px; font-weight:700;
+    padding:10px 18px; border-radius:20px; font-size:14px; font-weight:700;
     background:var(--primary-light); color:var(--primary); border:1.5px solid #FFD4C0;
     transition:all 0.15s;
   }
@@ -88,70 +103,82 @@
 
   /* Input bar */
   .input-bar {
-    display:flex; gap:8px; padding:12px 16px; background:var(--card);
+    display:flex; gap:10px; padding:14px 32px; background:var(--card);
     border-top:2px solid var(--border); position:sticky; bottom:0;
   }
   .input-field {
-    flex:1; padding:12px 16px; border-radius:24px; border:2px solid var(--border);
-    font-size:15px; font-weight:600; background:var(--bg);
+    flex:1; padding:14px 20px; border-radius:24px; border:2px solid var(--border);
+    font-size:16px; font-weight:600; background:var(--bg);
   }
   .input-field:focus { border-color:var(--primary); }
   .send-btn {
-    padding:12px 18px; border-radius:24px; font-size:15px; font-weight:800;
+    padding:14px 24px; border-radius:24px; font-size:16px; font-weight:800;
     background:var(--primary); color:#fff;
   }
   .send-btn:disabled { opacity:0.4; }
 
   /* Flashcard */
+  .cards-content { padding: 24px 32px; }
   .flashcard {
-    background:var(--card); border-radius:24px; padding:36px 24px; text-align:center;
+    background:var(--card); border-radius:24px; padding:48px 32px; text-align:center;
     box-shadow:0 6px 25px rgba(0,0,0,0.07); border:2px solid var(--border); margin:16px 0;
   }
-  .flash-en { font-size:30px; font-weight:900; color:var(--text); margin-bottom:6px; }
-  .flash-sentence { font-size:13px; color:var(--muted); font-style:italic; margin-bottom:16px; }
-  .flash-cn { font-size:24px; font-weight:800; color:var(--primary); animation:popIn 0.3s; }
+  .flash-en { font-size:36px; font-weight:900; color:var(--text); margin-bottom:8px; }
+  .flash-sentence { font-size:14px; color:var(--muted); font-style:italic; margin-bottom:20px; }
+  .flash-cn { font-size:28px; font-weight:800; color:var(--primary); animation:popIn 0.3s; }
 
   .btn-primary {
-    display:block; width:100%; padding:15px; border-radius:16px; font-size:17px; font-weight:800;
+    display:block; width:100%; padding:16px; border-radius:16px; font-size:18px; font-weight:800;
     background:linear-gradient(135deg,var(--primary),#FF8C42); color:#fff;
     box-shadow:0 4px 14px rgba(255,107,53,0.3); margin-top:14px;
   }
   .btn-primary:active { transform:scale(0.97); }
   .btn-outline {
-    padding:10px 22px; border-radius:14px; font-size:14px; font-weight:700;
-    background:var(--blue-light); color:var(--blue);
-  }
-
-  /* Unit selector */
-  .unit-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .unit-card {
-    padding:14px; border-radius:14px; text-align:center; border:2px solid var(--border);
-    background:var(--card); transition:all 0.15s;
-  }
-  .unit-card.active { border-color:var(--primary); background:var(--primary-light); }
-  .unit-card:active { transform:scale(0.96); }
-
-  /* XP popup */
-  .xp-popup {
-    position:fixed; top:70px; left:50%; transform:translateX(-50%);
-    background:var(--gold); color:#fff; padding:7px 18px; border-radius:20px;
-    font-weight:800; font-size:16px; z-index:999; box-shadow:0 4px 18px rgba(245,158,11,0.4);
-    animation:xpFloat 1.3s ease-out forwards;
+    padding:12px 24px; border-radius:14px; font-size:15px; font-weight:700;
+    background:var(--blue-light); color:var(--blue); display:inline-block;
   }
 
   /* Progress */
-  .stat-card { background:var(--card); border:2px solid var(--border); border-radius:16px; padding:16px; margin-bottom:10px; }
-  .stat-label { font-size:12px; color:var(--muted); font-weight:700; }
-  .stat-value { font-size:28px; font-weight:900; color:var(--text); }
+  .progress-content { padding: 24px 32px; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-card { background:var(--card); border:2px solid var(--border); border-radius:16px; padding:20px; }
+  .stat-card.full-width { grid-column: 1 / -1; }
+  .stat-label { font-size:13px; color:var(--muted); font-weight:700; }
+  .stat-value { font-size:32px; font-weight:900; color:var(--text); }
+
+  /* XP popup */
+  .xp-popup {
+    position:fixed; top:80px; left:50%; transform:translateX(-50%);
+    background:var(--gold); color:#fff; padding:8px 22px; border-radius:20px;
+    font-weight:800; font-size:18px; z-index:999; box-shadow:0 4px 18px rgba(245,158,11,0.4);
+    animation:xpFloat 1.3s ease-out forwards;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    .header { padding: 20px 16px; }
+    .header-title { font-size: 22px; }
+    .home-content, .cards-content, .progress-content { padding: 16px; }
+    .chat-area { padding: 16px; }
+    .input-bar { padding: 12px 16px; }
+    .quick-replies { padding: 0 16px 8px; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .unit-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-grid { grid-template-columns: 1fr; }
+    .msg { max-width: 88%; font-size: 14px; }
+    .flashcard { padding: 32px 20px; }
+    .flash-en { font-size: 28px; }
+    .flash-cn { font-size: 22px; }
+  }
 
   /* Scrollbar */
-  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar { width:5px; }
   ::-webkit-scrollbar-thumb { background:#ccc; border-radius:4px; }
 </style>
 </head>
 <body>
 
-<div id="app"></div>
+<div class="app-container" id="app"></div>
 
 <script>
 // ═══════════════════════════════════════════
@@ -306,42 +333,18 @@ const UNITS = [
 // ═══════════════════════════════════════════
 function buildSystemPrompt(unitId, state) {
   const unit = UNITS.find(u => u.id === unitId);
-  const wordsStr = unit.words.map(w => `${w.en}(${w.cn})`).join(", ");
-  const sentStr = unit.sentences.map(s => `${s.en} = ${s.cn}`).join(" | ");
+  const wordsStr = unit.words.map(w => w.en + "(" + w.cn + ")").join(", ");
+  const sentStr = unit.sentences.map(s => s.en + " = " + s.cn).join(" | ");
 
-  return `你是「小E老师」，专门为中国四年级小朋友设计的英语AI私教。
-
-## 你的性格
-- 活泼有趣，像温暖的大哥哥/大姐姐
-- 善用emoji 🎉⭐🔥💪
-- 每次回复3-5句话，不要太长
-- 用中文交流，教英文内容
-
-## 教学原则
-1. 永远鼓励！答错说"差一点！再试试💪"，答对说"太棒了！⭐"
-2. 多出选择题（给A/B/C选项），减少开放式问答
-3. 一次只教一个知识点
-4. 英文单词和句子用【】括起来，如【playground】【Where is the library?】
-5. 回复末尾给2-3个快捷回复选项，格式为：[选项A] [选项B] [选项C]
-
-## 当前教学内容：Unit ${unit.id} - ${unit.title} ${unit.emoji}
-核心词汇：${wordsStr}
-核心句型：${sentStr}
-语法要点：${unit.grammar}
-角色扮演场景：${unit.roleplay}
-
-## 学生状态
-经验值：${state.xp} XP，等级：Lv.${state.level}
-已掌握单词数：${state.mastered.length}
-当前模式：${state.mode || '自由学习'}
-
-## 重要规则
-- 如果学生说"开始学习"或"今天学什么"，就从词汇开始教起
-- 如果学生说"考考我"或"闯关"，就出选择题测验
-- 如果学生说"角色扮演"或"练对话"，就进入角色扮演模式
-- 如果学生说"复习"，就从已学内容中出复习题
-- 答对一题就说"+10经验值⭐"，连续答对说"连击🔥"
-- 如果学生连续答错3题，主动降难度，多给提示`;
+  return "你是「小E老师」，专门为中国四年级小朋友设计的英语AI私教。\n\n" +
+    "## 你的性格\n- 活泼有趣，像温暖的大哥哥/大姐姐\n- 善用emoji 🎉⭐🔥💪\n- 每次回复3-5句话，不要太长\n- 用中文交流，教英文内容\n\n" +
+    "## 教学原则\n1. 永远鼓励！答错说\"差一点！再试试💪\"，答对说\"太棒了！⭐\"\n2. 多出选择题（给A/B/C选项），减少开放式问答\n3. 一次只教一个知识点\n" +
+    "4. 英文单词和句子用【】括起来，如【playground】【Where is the library?】\n5. 回复末尾给2-3个快捷回复选项，格式为：[选项A] [选项B] [选项C]\n\n" +
+    "## 当前教学内容：Unit " + unit.id + " - " + unit.title + " " + unit.emoji + "\n" +
+    "核心词汇：" + wordsStr + "\n核心句型：" + sentStr + "\n语法要点：" + unit.grammar + "\n角色扮演场景：" + unit.roleplay + "\n\n" +
+    "## 学生状态\n经验值：" + state.xp + " XP，等级：Lv." + state.level + "\n已掌握单词数：" + state.mastered.length + "\n\n" +
+    "## 重要规则\n- 如果学生说\"开始学习\"或\"今天学什么\"，就从词汇开始教起\n- 如果学生说\"考考我\"或\"闯关\"，就出选择题测验\n" +
+    "- 如果学生说\"角色扮演\"或\"练对话\"，就进入角色扮演模式\n- 答对一题就说\"+10经验值⭐\"，连续答对说\"连击🔥\"\n- 如果学生连续答错3题，主动降难度";
 }
 
 // ═══════════════════════════════════════════
@@ -350,65 +353,61 @@ function buildSystemPrompt(unitId, state) {
 function speak(text, rate) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
+  var u = new SpeechSynthesisUtterance(text);
   u.lang = "en-US"; u.rate = rate || 0.85; u.pitch = 1.1;
-  const voices = window.speechSynthesis.getVoices();
-  const v = voices.find(v => v.lang.startsWith("en") && v.name.includes("Female"))
-    || voices.find(v => v.lang.startsWith("en-US"))
-    || voices.find(v => v.lang.startsWith("en"));
+  var voices = window.speechSynthesis.getVoices();
+  var v = voices.find(function(v) { return v.lang.startsWith("en") && v.name.includes("Female"); })
+    || voices.find(function(v) { return v.lang.startsWith("en-US"); })
+    || voices.find(function(v) { return v.lang.startsWith("en"); });
   if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
-// Preload voices
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
-  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
 }
 
 // ═══════════════════════════════════════════
-// STATE MANAGEMENT
+// STATE
 // ═══════════════════════════════════════════
-const LEVELS = [
+var LEVELS = [
   {lv:1,title:"英语小白",xp:0},{lv:2,title:"单词学徒",xp:100},{lv:3,title:"句子猎人",xp:250},
   {lv:4,title:"对话勇者",xp:500},{lv:5,title:"语法骑士",xp:800},{lv:6,title:"英语小达人",xp:1200},
   {lv:7,title:"英语小学霸",xp:1800},
 ];
 
 function calcLevel(xp) {
-  let r = LEVELS[0];
-  for (const l of LEVELS) { if (xp >= l.xp) r = l; }
-  const next = LEVELS.find(l => l.xp > xp);
-  return { ...r, nextXp: next ? next.xp : r.xp + 600 };
+  var r = LEVELS[0];
+  for (var i = 0; i < LEVELS.length; i++) { if (xp >= LEVELS[i].xp) r = LEVELS[i]; }
+  var next = LEVELS.find(function(l) { return l.xp > xp; });
+  return { lv: r.lv, title: r.title, xp: r.xp, nextXp: next ? next.xp : r.xp + 600 };
 }
 
 function loadState() {
-  try {
-    const s = JSON.parse(localStorage.getItem("tutor_state"));
-    if (s) return s;
-  } catch {}
-  return { xp:0, level:1, levelTitle:"英语小白", currentUnit:1, mastered:[], sessions:0, mode:null };
+  try { var s = JSON.parse(localStorage.getItem("tutor_state")); if (s) return s; } catch(e) {}
+  return { xp:0, level:1, levelTitle:"英语小白", currentUnit:1, mastered:[], sessions:0 };
 }
 
 function saveState(state) {
-  const lv = calcLevel(state.xp);
+  var lv = calcLevel(state.xp);
   state.level = lv.lv;
   state.levelTitle = lv.title;
   localStorage.setItem("tutor_state", JSON.stringify(state));
 }
 
 // ═══════════════════════════════════════════
-// API CALL
+// API
 // ═══════════════════════════════════════════
 async function callAI(messages, unitId, state) {
-  const system = buildSystemPrompt(unitId, state);
+  var system = buildSystemPrompt(unitId, state);
   try {
-    const res = await fetch("/api/chat", {
+    var res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages, system }),
+      body: JSON.stringify({ messages: messages, system: system }),
     });
-    if (!res.ok) throw new Error("API error");
-    const data = await res.json();
+    if (!res.ok) throw new Error("API error " + res.status);
+    var data = await res.json();
     return data.reply;
   } catch (e) {
     console.error(e);
@@ -417,330 +416,229 @@ async function callAI(messages, unitId, state) {
 }
 
 // ═══════════════════════════════════════════
-// APP RENDER
+// APP
 // ═══════════════════════════════════════════
 function App() {
-  const state = loadState();
-  let currentTab = "home"; // home, chat, cards, progress
-  let chatMessages = []; // {role, content}
-  let displayMessages = []; // {type: ai|user, text}
-  let isLoading = false;
-  let currentUnit = state.currentUnit || 1;
-  let cardIndex = 0;
-  let cardFlipped = false;
-  let cardMode = "words"; // words or sentences
-  let xpPopup = null;
+  var state = loadState();
+  var currentTab = "home";
+  var chatMessages = [];
+  var displayMessages = [];
+  var isLoading = false;
+  var currentUnit = state.currentUnit || 1;
+  var cardIndex = 0;
+  var cardFlipped = false;
+  var cardMode = "words";
+  var xpPopup = null;
 
   function showXpPopup(amount) {
-    xpPopup = amount;
-    render();
-    setTimeout(() => { xpPopup = null; render(); }, 1300);
+    xpPopup = amount; render();
+    setTimeout(function() { xpPopup = null; render(); }, 1300);
   }
 
   function addXp(amount) {
-    state.xp += amount;
-    saveState(state);
-    showXpPopup(amount);
+    state.xp += amount; saveState(state); showXpPopup(amount);
   }
 
-  // Process AI response - extract English text for TTS, extract quick replies
   function processAIMessage(text) {
-    // Extract quick replies [选项]
-    const quickReplies = [];
-    const qrRegex = /\[([^\]]+)\]/g;
-    let match;
-    // Find quick replies at the end
-    const lines = text.split("\n");
-    const lastLines = lines.slice(-3).join("\n");
-    while ((match = qrRegex.exec(lastLines)) !== null) {
-      quickReplies.push(match[1]);
-    }
+    var quickReplies = [];
+    var qrRegex = /\[([^\]]+)\]/g;
+    var match;
+    var lines = text.split("\n");
+    var lastLines = lines.slice(-3).join("\n");
+    while ((match = qrRegex.exec(lastLines)) !== null) { quickReplies.push(match[1]); }
 
-    // Auto-speak English in 【】
-    const enRegex = /【([^】]+)】/g;
-    const enTexts = [];
-    while ((match = enRegex.exec(text)) !== null) {
-      enTexts.push(match[1]);
-    }
-    if (enTexts.length > 0) {
-      setTimeout(() => speak(enTexts[0]), 500);
-    }
+    var enRegex = /【([^】]+)】/g;
+    var enTexts = [];
+    while ((match = enRegex.exec(text)) !== null) { enTexts.push(match[1]); }
+    if (enTexts.length > 0) { setTimeout(function() { speak(enTexts[0]); }, 500); }
 
-    // Format display - make 【text】 clickable for TTS
-    let displayText = text;
-    // Remove quick reply lines from display
+    var displayText = text;
     if (quickReplies.length > 0) {
       displayText = displayText.replace(/\n?\s*(\[[^\]]+\]\s*)+\s*$/g, "").trim();
     }
     displayText = displayText.replace(/【([^】]+)】/g, '<span class="en-text" onclick="speak(\'$1\')">🔊 $1</span>');
-
-    return { displayText, quickReplies };
+    return { displayText: displayText, quickReplies: quickReplies };
   }
 
   async function sendMessage(text) {
     if (isLoading || !text.trim()) return;
-
-    // Add user message
     chatMessages.push({ role: "user", content: text });
-    displayMessages.push({ type: "user", text });
-    isLoading = true;
-    render();
-    scrollToBottom();
+    displayMessages.push({ type: "user", text: text });
+    isLoading = true; render(); scrollToBottom();
 
-    // Call AI
-    const reply = await callAI(chatMessages, currentUnit, state);
+    var reply = await callAI(chatMessages, currentUnit, state);
     chatMessages.push({ role: "assistant", content: reply });
+    var processed = processAIMessage(reply);
+    displayMessages.push({ type: "ai", text: processed.displayText, quickReplies: processed.quickReplies });
 
-    const { displayText, quickReplies } = processAIMessage(reply);
-    displayMessages.push({ type: "ai", text: displayText, quickReplies });
+    if (reply.includes("+10") || reply.includes("经验值")) addXp(10);
+    if (reply.includes("连击") || reply.includes("combo")) addXp(5);
 
-    // Check for XP in reply
-    if (reply.includes("+10") || reply.includes("经验值")) {
-      addXp(10);
-    }
-    if (reply.includes("连击") || reply.includes("combo")) {
-      addXp(5);
-    }
-
-    isLoading = false;
-    state.sessions++;
-    saveState(state);
-    render();
-    scrollToBottom();
+    isLoading = false; state.sessions++; saveState(state); render(); scrollToBottom();
   }
 
   function scrollToBottom() {
-    setTimeout(() => {
-      const chatArea = document.getElementById("chat-area");
-      if (chatArea) chatArea.scrollTop = chatArea.scrollHeight;
+    setTimeout(function() {
+      var el = document.getElementById("chat-area");
+      if (el) el.scrollTop = el.scrollHeight;
     }, 100);
   }
 
   function startChat(initialMsg) {
-    chatMessages = [];
-    displayMessages = [];
-    currentTab = "chat";
-    render();
+    chatMessages = []; displayMessages = [];
+    currentTab = "chat"; render();
     sendMessage(initialMsg || "你好小E老师！今天学什么？");
   }
 
   // ─── Render Functions ───
 
   function renderHeader() {
-    const lv = calcLevel(state.xp);
-    const pct = lv.nextXp > lv.xp ? ((state.xp - lv.xp) / (lv.nextXp - lv.xp) * 100) : 100;
-    const unit = UNITS.find(u => u.id === currentUnit);
-    return `
-      <div class="header">
-        <div class="header-emoji">${unit.emoji}</div>
-        <div class="header-sub">小E老师的英语课堂</div>
-        <div class="header-title">Unit ${unit.id}: ${unit.title} ${unit.emoji}</div>
-        <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${pct}%"></div></div>
-        <div class="xp-info">
-          <span>⭐ ${state.xp} XP</span>
-          <span>Lv.${lv.lv} ${lv.title}</span>
-        </div>
-      </div>`;
+    var lv = calcLevel(state.xp);
+    var pct = lv.nextXp > lv.xp ? ((state.xp - lv.xp) / (lv.nextXp - lv.xp) * 100) : 100;
+    var unit = UNITS.find(function(u) { return u.id === currentUnit; });
+    return '<div class="header">' +
+      '<div class="header-emoji">' + unit.emoji + '</div>' +
+      '<div class="header-sub">小E老师的英语课堂</div>' +
+      '<div class="header-title">Unit ' + unit.id + ': ' + unit.title + ' ' + unit.emoji + '</div>' +
+      '<div class="xp-bar-bg"><div class="xp-bar-fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="xp-info"><span>⭐ ' + state.xp + ' XP</span><span>Lv.' + lv.lv + ' ' + lv.title + '</span></div>' +
+      '</div>';
   }
 
   function renderNav() {
-    const tabs = [
-      {id:"home",label:"🏠 首页"},{id:"chat",label:"💬 AI对话"},{id:"cards",label:"🔊 单词卡"},{id:"progress",label:"📊 成绩"},
-    ];
-    return `<div class="nav">${tabs.map(t =>
-      `<button class="nav-btn ${currentTab===t.id?'active':''}" onclick="app.switchTab('${t.id}')">${t.label}</button>`
-    ).join("")}</div>`;
+    var tabs = [{id:"home",label:"🏠 首页"},{id:"chat",label:"💬 AI对话"},{id:"cards",label:"🔊 单词卡"},{id:"progress",label:"📊 成绩"}];
+    return '<div class="nav">' + tabs.map(function(t) {
+      return '<button class="nav-btn ' + (currentTab===t.id?'active':'') + '" onclick="app.switchTab(\'' + t.id + '\')">' + t.label + '</button>';
+    }).join("") + '</div>';
   }
 
   function renderHome() {
-    return `
-      <div style="padding:16px" class="fade-in">
-        <div style="margin-bottom:16px">
-          <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px">选择单元</div>
-          <div class="unit-grid">
-            ${UNITS.map(u => `
-              <button class="unit-card ${currentUnit===u.id?'active':''}" onclick="app.selectUnit(${u.id})">
-                <div style="font-size:24px;margin-bottom:4px">${u.emoji}</div>
-                <div style="font-size:13px;font-weight:800">U${u.id} ${u.title}</div>
-              </button>
-            `).join("")}
-          </div>
-        </div>
+    return '<div class="home-content fade-in">' +
+      '<div style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:10px">选择单元</div>' +
+      '<div class="unit-grid">' +
+      UNITS.map(function(u) {
+        return '<button class="unit-card ' + (currentUnit===u.id?'active':'') + '" onclick="app.selectUnit(' + u.id + ')">' +
+          '<div style="font-size:28px;margin-bottom:4px">' + u.emoji + '</div>' +
+          '<div style="font-size:13px;font-weight:800">U' + u.id + ' ' + u.title + '</div></button>';
+      }).join("") +
+      '</div>' +
 
-        <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px">开始学习</div>
+      '<div style="font-size:14px;color:var(--muted);font-weight:700;margin:20px 0 10px">开始学习</div>' +
+      '<div class="menu-grid">' +
 
-        <button class="menu-card" onclick="app.startChat('小E老师，我们开始学习Unit ${currentUnit}的单词吧！')">
-          <div class="menu-icon" style="background:var(--blue-light)">🔊</div>
-          <div>
-            <div class="menu-title">AI 教单词</div>
-            <div class="menu-sub">AI老师语音教学 · 互动问答 · 实时纠错</div>
-          </div>
-        </button>
+      '<button class="menu-card" onclick="app.startChat(\'小E老师，我们开始学习Unit ' + currentUnit + '的单词吧！\')">' +
+        '<div class="menu-icon" style="background:var(--blue-light)">🔊</div>' +
+        '<div><div class="menu-title">AI 教单词</div><div class="menu-sub">AI老师语音教学 · 互动问答</div></div></button>' +
 
-        <button class="menu-card" onclick="app.startChat('小E老师，考考我Unit ${currentUnit}的内容吧！出选择题！')">
-          <div class="menu-icon" style="background:var(--success-light)">🎯</div>
-          <div>
-            <div class="menu-title">AI 闯关测验</div>
-            <div class="menu-sub">AI出题 · 实时打分 · 连击加分</div>
-          </div>
-        </button>
+      '<button class="menu-card" onclick="app.startChat(\'小E老师，考考我Unit ' + currentUnit + '的内容！出选择题！\')">' +
+        '<div class="menu-icon" style="background:var(--success-light)">🎯</div>' +
+        '<div><div class="menu-title">AI 闯关测验</div><div class="menu-sub">AI出题 · 实时打分</div></div></button>' +
 
-        <button class="menu-card" onclick="app.startChat('小E老师，我们来角色扮演吧！你扮演Unit ${currentUnit}里面的角色！')">
-          <div class="menu-icon" style="background:var(--purple-light)">🎭</div>
-          <div>
-            <div class="menu-title">AI 角色扮演</div>
-            <div class="menu-sub">真实场景对话 · AI扮演不同角色</div>
-          </div>
-        </button>
+      '<button class="menu-card" onclick="app.startChat(\'小E老师，我们来角色扮演吧！你扮演Unit ' + currentUnit + '里面的角色！\')">' +
+        '<div class="menu-icon" style="background:var(--purple-light)">🎭</div>' +
+        '<div><div class="menu-title">AI 角色扮演</div><div class="menu-sub">真实场景对话</div></div></button>' +
 
-        <button class="menu-card" onclick="app.startChat('小E老师，帮我复习一下之前学过的内容吧！')">
-          <div class="menu-icon" style="background:var(--primary-light)">🔄</div>
-          <div>
-            <div class="menu-title">AI 智能复习</div>
-            <div class="menu-sub">AI找出薄弱点 · 针对性强化</div>
-          </div>
-        </button>
+      '<button class="menu-card" onclick="app.startChat(\'小E老师，帮我复习一下之前学过的内容！\')">' +
+        '<div class="menu-icon" style="background:var(--primary-light)">🔄</div>' +
+        '<div><div class="menu-title">AI 智能复习</div><div class="menu-sub">找薄弱点 · 针对强化</div></div></button>' +
 
-        <button class="menu-card" onclick="app.switchTab('cards')">
-          <div class="menu-icon" style="background:var(--danger-light)">📇</div>
-          <div>
-            <div class="menu-title">单词卡片</div>
-            <div class="menu-sub">语音翻卡 · 自主复习 · 不需要AI</div>
-          </div>
-        </button>
+      '<button class="menu-card full-width" onclick="app.switchTab(\'cards\')">' +
+        '<div class="menu-icon" style="background:var(--danger-light)">📇</div>' +
+        '<div><div class="menu-title">单词卡片</div><div class="menu-sub">语音翻卡 · 自主复习 · 不需要AI</div></div></button>' +
 
-        <div style="margin-top:14px;padding:12px 14px;background:var(--blue-light);border-radius:14px;font-size:12px;color:var(--blue);font-weight:600;line-height:1.6">
-          💡 建议顺序：先「AI教单词」学发音 → 「闯关测验」检验掌握 → 「角色扮演」实战对话
-        </div>
-      </div>`;
+      '</div>' +
+      '<div style="margin-top:16px;padding:14px 16px;background:var(--blue-light);border-radius:14px;font-size:13px;color:var(--blue);font-weight:600;line-height:1.7">' +
+        '💡 建议顺序：先「AI教单词」学发音 → 「闯关测验」检验掌握 → 「角色扮演」实战对话</div>' +
+      '</div>';
   }
 
   function renderChat() {
-    return `
-      <div style="display:flex;flex-direction:column;height:calc(100vh - 130px)">
-        <div class="chat-area" id="chat-area">
-          ${displayMessages.map(m => {
-            if (m.type === "user") {
-              return `<div class="msg msg-user">${m.text}</div>`;
-            } else {
-              let html = `<div class="msg msg-ai">${m.text}</div>`;
-              if (m.quickReplies && m.quickReplies.length > 0) {
-                html += `<div class="quick-replies">${m.quickReplies.map(q =>
-                  `<button class="quick-btn" onclick="app.sendMessage('${q.replace(/'/g,"\\'")}')">${q}</button>`
-                ).join("")}</div>`;
-              }
-              return html;
-            }
-          }).join("")}
-          ${isLoading ? `<div class="typing-dots"><span></span><span></span><span></span></div>` : ""}
-        </div>
-        <div class="input-bar">
-          <input class="input-field" id="chat-input" placeholder="用中文或英文回答..."
-            onkeydown="if(event.key==='Enter')app.sendFromInput()" />
-          <button class="send-btn" onclick="app.sendFromInput()" ${isLoading?'disabled':''}>发送</button>
-        </div>
-      </div>`;
+    return '<div class="chat-wrapper">' +
+      '<div class="chat-area" id="chat-area">' +
+      displayMessages.map(function(m) {
+        if (m.type === "user") return '<div class="msg msg-user">' + m.text + '</div>';
+        var html = '<div class="msg msg-ai">' + m.text + '</div>';
+        if (m.quickReplies && m.quickReplies.length > 0) {
+          html += '<div class="quick-replies">' + m.quickReplies.map(function(q) {
+            return '<button class="quick-btn" onclick="app.sendMessage(\'' + q.replace(/'/g, "\\'") + '\')">' + q + '</button>';
+          }).join("") + '</div>';
+        }
+        return html;
+      }).join("") +
+      (isLoading ? '<div class="typing-dots"><span></span><span></span><span></span></div>' : "") +
+      '</div>' +
+      '<div class="input-bar">' +
+        '<input class="input-field" id="chat-input" placeholder="用中文或英文回答..." onkeydown="if(event.key===\'Enter\')app.sendFromInput()" />' +
+        '<button class="send-btn" onclick="app.sendFromInput()" ' + (isLoading?'disabled':'') + '>发送</button>' +
+      '</div></div>';
   }
 
   function renderCards() {
-    const unit = UNITS.find(u => u.id === currentUnit);
-    const list = cardMode === "words" ? unit.words : unit.sentences;
-    const item = list[cardIndex] || list[0];
+    var unit = UNITS.find(function(u) { return u.id === currentUnit; });
+    var list = cardMode === "words" ? unit.words : unit.sentences;
+    var item = list[cardIndex] || list[0];
 
-    return `
-      <div style="padding:16px" class="fade-in">
-        <div style="display:flex;gap:8px;margin-bottom:16px">
-          <button class="btn-outline" style="${cardMode==='words'?'background:var(--blue);color:#fff':''}"
-            onclick="app.setCardMode('words')">单词</button>
-          <button class="btn-outline" style="${cardMode==='sentences'?'background:var(--blue);color:#fff':''}"
-            onclick="app.setCardMode('sentences')">句型</button>
-        </div>
-
-        <div style="display:flex;gap:4px;margin-bottom:8px">
-          ${list.map((_,i) => `<div style="flex:1;height:4px;border-radius:2px;background:${i<=cardIndex?'var(--primary)':'var(--border)'}"></div>`).join("")}
-        </div>
-        <div style="text-align:right;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px">
-          ${cardIndex+1} / ${list.length}
-        </div>
-
-        <div class="flashcard pop-in" key="${cardIndex}${cardMode}">
-          <div class="flash-en">${item.en}</div>
-          ${item.sentence ? `<div class="flash-sentence">"${item.sentence}"</div>` : ""}
-          <button class="btn-outline" onclick="speak('${item.en.replace(/'/g,"\\'")}')">🔊 听发音</button>
-          ${item.sentence ? `<button class="btn-outline" style="margin-left:6px" onclick="speak('${item.sentence.replace(/'/g,"\\'")}')">🔊 听例句</button>` : ""}
-
-          <div style="margin-top:20px">
-            ${cardFlipped ?
-              `<div class="flash-cn">${item.cn}</div>` :
-              `<button style="padding:12px 28px;border-radius:14px;font-size:16px;font-weight:700;background:var(--primary-light);color:var(--primary);border:none;cursor:pointer" onclick="app.flipCard()">👀 看中文</button>`
-            }
-          </div>
-        </div>
-
-        <div style="display:flex;gap:10px">
-          <button class="btn-primary" style="flex:1;background:var(--muted)" onclick="app.prevCard()" ${cardIndex===0?'disabled':''}>← 上一个</button>
-          <button class="btn-primary" style="flex:2" onclick="app.nextCard()">
-            ${cardIndex >= list.length - 1 ? "✅ 完成！" : "下一个 →"}
-          </button>
-        </div>
-      </div>`;
+    return '<div class="cards-content fade-in">' +
+      '<div style="display:flex;gap:10px;margin-bottom:16px">' +
+        '<button class="btn-outline" style="' + (cardMode==='words'?'background:var(--blue);color:#fff':'') + '" onclick="app.setCardMode(\'words\')">单词</button>' +
+        '<button class="btn-outline" style="' + (cardMode==='sentences'?'background:var(--blue);color:#fff':'') + '" onclick="app.setCardMode(\'sentences\')">句型</button>' +
+      '</div>' +
+      '<div style="display:flex;gap:4px;margin-bottom:8px">' +
+        list.map(function(_,i) { return '<div style="flex:1;height:5px;border-radius:3px;background:' + (i<=cardIndex?'var(--primary)':'var(--border)') + '"></div>'; }).join("") +
+      '</div>' +
+      '<div style="text-align:right;font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px">' + (cardIndex+1) + ' / ' + list.length + '</div>' +
+      '<div class="flashcard pop-in">' +
+        '<div class="flash-en">' + item.en + '</div>' +
+        (item.sentence ? '<div class="flash-sentence">"' + item.sentence + '"</div>' : '') +
+        '<button class="btn-outline" onclick="speak(\'' + item.en.replace(/'/g, "\\'") + '\')">🔊 听发音</button>' +
+        (item.sentence ? ' <button class="btn-outline" style="margin-left:8px" onclick="speak(\'' + item.sentence.replace(/'/g, "\\'") + '\')">🔊 听例句</button>' : '') +
+        '<div style="margin-top:24px">' +
+          (cardFlipped ? '<div class="flash-cn">' + item.cn + '</div>' :
+            '<button style="padding:14px 32px;border-radius:14px;font-size:17px;font-weight:700;background:var(--primary-light);color:var(--primary);border:none;cursor:pointer" onclick="app.flipCard()">👀 看中文</button>') +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:12px">' +
+        '<button class="btn-primary" style="flex:1;background:var(--muted)" onclick="app.prevCard()" ' + (cardIndex===0?'disabled':'') + '>← 上一个</button>' +
+        '<button class="btn-primary" style="flex:2" onclick="app.nextCard()">' + (cardIndex >= list.length - 1 ? '✅ 完成！' : '下一个 →') + '</button>' +
+      '</div></div>';
   }
 
   function renderProgress() {
-    const lv = calcLevel(state.xp);
-    const pct = lv.nextXp > lv.xp ? Math.round((state.xp - lv.xp) / (lv.nextXp - lv.xp) * 100) : 100;
-    return `
-      <div style="padding:16px" class="fade-in">
-        <div style="text-align:center;padding:24px 0">
-          <div style="font-size:60px;animation:float 3s infinite">🏆</div>
-          <div style="font-size:28px;font-weight:900;margin-top:8px">Lv.${lv.lv}</div>
-          <div style="font-size:18px;font-weight:800;color:var(--primary)">${lv.title}</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-label">总经验值</div>
-          <div class="stat-value">⭐ ${state.xp} XP</div>
-          <div style="margin-top:8px">
-            <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${pct}%"></div></div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px">距离下一级还需 ${lv.nextXp - state.xp} XP</div>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="stat-card">
-            <div class="stat-label">学习次数</div>
-            <div class="stat-value">${state.sessions}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">已掌握单词</div>
-            <div class="stat-value">${state.mastered.length}</div>
-          </div>
-        </div>
-
-        <div class="stat-card" style="margin-top:10px">
-          <div class="stat-label" style="margin-bottom:8px">单元进度</div>
-          ${UNITS.map(u => {
-            const unitMastered = state.mastered.filter(w => u.words.some(uw => uw.en === w)).length;
-            const pct = Math.round(unitMastered / u.words.length * 100);
-            return `<div style="margin-bottom:8px">
-              <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:3px">
-                <span>${u.emoji} U${u.id} ${u.title}</span><span>${pct}%</span>
-              </div>
-              <div class="xp-bar-bg" style="height:8px"><div class="xp-bar-fill" style="width:${pct}%"></div></div>
-            </div>`;
-          }).join("")}
-        </div>
-
-        <button class="btn-primary" style="margin-top:14px;background:var(--danger)"
-          onclick="if(confirm('确定要清除所有学习数据吗？'))app.resetState()">
-          🗑️ 重置数据
-        </button>
-      </div>`;
+    var lv = calcLevel(state.xp);
+    var pct = lv.nextXp > lv.xp ? Math.round((state.xp - lv.xp) / (lv.nextXp - lv.xp) * 100) : 100;
+    return '<div class="progress-content fade-in">' +
+      '<div style="text-align:center;padding:28px 0">' +
+        '<div style="font-size:64px;animation:float 3s infinite">🏆</div>' +
+        '<div style="font-size:32px;font-weight:900;margin-top:8px">Lv.' + lv.lv + '</div>' +
+        '<div style="font-size:20px;font-weight:800;color:var(--primary)">' + lv.title + '</div>' +
+      '</div>' +
+      '<div class="stat-grid">' +
+        '<div class="stat-card full-width">' +
+          '<div class="stat-label">总经验值</div>' +
+          '<div class="stat-value">⭐ ' + state.xp + ' XP</div>' +
+          '<div style="margin-top:10px"><div class="xp-bar-bg"><div class="xp-bar-fill" style="width:' + pct + '%"></div></div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-top:4px">距离下一级还需 ' + (lv.nextXp - state.xp) + ' XP</div></div>' +
+        '</div>' +
+        '<div class="stat-card"><div class="stat-label">学习次数</div><div class="stat-value">' + state.sessions + '</div></div>' +
+        '<div class="stat-card"><div class="stat-label">已掌握单词</div><div class="stat-value">' + state.mastered.length + '</div></div>' +
+      '</div>' +
+      '<div class="stat-card full-width" style="margin-top:12px">' +
+        '<div class="stat-label" style="margin-bottom:10px">单元进度</div>' +
+        UNITS.map(function(u) {
+          var m = state.mastered.filter(function(w) { return u.words.some(function(uw) { return uw.en === w; }); }).length;
+          var p = Math.round(m / u.words.length * 100);
+          return '<div style="margin-bottom:10px">' +
+            '<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:4px">' +
+              '<span>' + u.emoji + ' U' + u.id + ' ' + u.title + '</span><span>' + p + '%</span></div>' +
+            '<div class="xp-bar-bg" style="height:8px"><div class="xp-bar-fill" style="width:' + p + '%"></div></div></div>';
+        }).join("") +
+      '</div>' +
+      '<button class="btn-primary" style="margin-top:16px;background:var(--danger)" onclick="if(confirm(\'确定要清除所有学习数据吗？\'))app.resetState()">🗑️ 重置数据</button>' +
+      '</div>';
   }
 
-  // ─── Main Render ───
   function render() {
-    let content = "";
+    var content = "";
     switch (currentTab) {
       case "home": content = renderHome(); break;
       case "chat": content = renderChat(); break;
@@ -749,55 +647,32 @@ function App() {
     }
     document.getElementById("app").innerHTML =
       renderHeader() + renderNav() + content +
-      (xpPopup !== null ? `<div class="xp-popup">+${xpPopup} XP ⭐</div>` : "");
+      (xpPopup !== null ? '<div class="xp-popup">+' + xpPopup + ' XP ⭐</div>' : '');
   }
 
-  // ─── Public API ───
   return {
-    render,
-    switchTab(tab) { currentTab = tab; render(); },
-    selectUnit(id) { currentUnit = id; state.currentUnit = id; saveState(state); render(); },
-    startChat,
-    sendMessage,
-    sendFromInput() {
-      const input = document.getElementById("chat-input");
-      if (input && input.value.trim()) {
-        sendMessage(input.value.trim());
-        input.value = "";
-      }
+    render: render,
+    switchTab: function(tab) { currentTab = tab; render(); },
+    selectUnit: function(id) { currentUnit = id; state.currentUnit = id; saveState(state); render(); },
+    startChat: startChat,
+    sendMessage: sendMessage,
+    sendFromInput: function() {
+      var input = document.getElementById("chat-input");
+      if (input && input.value.trim()) { sendMessage(input.value.trim()); input.value = ""; }
     },
-    setCardMode(m) { cardMode = m; cardIndex = 0; cardFlipped = false; render(); },
-    flipCard() {
-      cardFlipped = true;
-      addXp(3);
-      render();
+    setCardMode: function(m) { cardMode = m; cardIndex = 0; cardFlipped = false; render(); },
+    flipCard: function() { cardFlipped = true; addXp(3); render(); },
+    nextCard: function() {
+      var unit = UNITS.find(function(u) { return u.id === currentUnit; });
+      var list = cardMode === "words" ? unit.words : unit.sentences;
+      if (cardIndex >= list.length - 1) { addXp(15); currentTab = "home"; render(); }
+      else { cardIndex++; cardFlipped = false; render(); var item = list[cardIndex]; setTimeout(function() { speak(item.en); }, 300); }
     },
-    nextCard() {
-      const unit = UNITS.find(u => u.id === currentUnit);
-      const list = cardMode === "words" ? unit.words : unit.sentences;
-      if (cardIndex >= list.length - 1) {
-        addXp(15);
-        currentTab = "home";
-        render();
-      } else {
-        cardIndex++;
-        cardFlipped = false;
-        render();
-        const item = list[cardIndex];
-        setTimeout(() => speak(item.en), 300);
-      }
-    },
-    prevCard() {
-      if (cardIndex > 0) { cardIndex--; cardFlipped = false; render(); }
-    },
-    resetState() {
-      localStorage.removeItem("tutor_state");
-      location.reload();
-    },
+    prevCard: function() { if (cardIndex > 0) { cardIndex--; cardFlipped = false; render(); } },
+    resetState: function() { localStorage.removeItem("tutor_state"); location.reload(); },
   };
 }
 
-// ─── Init ───
 window.app = App();
 window.speak = speak;
 window.app.render();
